@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MeawMeaw 🐾 Smart App</title>
+  <title>MeawMeaw Ultimate Dash 🐾</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
   
   <style>
-    /* --- 1. CSS VARIABLES (8 PALETTES) --- */
+    /* --- 1. THEME ENGINE (8 PALETTES) --- */
     :root {
       --bg: #FEF7C5; --hero: #FFFCE6; --accent: #F3D617; --progress: #BCD3F9; --text: #5D5632;
     }
@@ -19,130 +19,195 @@
     [data-theme="peach"] { --bg: #FFF4FD; --hero: #FFFFFF; --accent: #FFB4DA; --progress: #D5FFC9; --text: #6B4E5E; }
     [data-theme="melon"] { --bg: #FFCBBF; --hero: #FFF5F2; --accent: #FF9B85; --progress: #FEF7C5; --text: #633E36; }
 
-    /* --- 2. BASE STYLES --- */
+    /* --- 2. LAYOUT --- */
     body {
       font-family: 'Kanit', sans-serif;
       background-color: var(--bg); color: var(--text);
-      margin: 0; padding: 20px; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center;
-      transition: all 0.4s ease;
+      margin: 0; padding: 20px 20px 120px;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+      transition: all 0.5s ease;
     }
+    .container { width: 100%; max-width: 380px; }
 
-    /* --- 3. HEADER & DROPDOWN --- */
-    .header { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; }
-    
+    /* --- 3. HEADER & MENU --- */
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; }
     .theme-dropdown {
-      position: absolute; top: 45px; right: 0; background: white; border-radius: 15px;
-      padding: 10px; display: none; grid-template-columns: repeat(4, 1fr); gap: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 100;
+      position: absolute; top: 50px; right: 0; background: white; border-radius: 20px;
+      padding: 12px; display: none; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 1000;
     }
     .theme-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #eee; }
 
-    /* --- 4. CARDS (จากรูปมึง) --- */
+    /* --- 4. CARDS (GLASSMORPISM) --- */
     .glass-card {
-      background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(12px);
-      width: 90%; max-width: 380px; padding: 20px; border-radius: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px);
+      padding: 20px; border-radius: 30px; margin-bottom: 15px;
+      border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     }
     .hero-card {
-      background-color: var(--hero); width: 90%; max-width: 380px; padding: 25px; border-radius: 35px;
+      background-color: var(--hero); padding: 25px; border-radius: 35px;
       text-align: center; margin-bottom: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
     }
 
-    /* --- 5. TASK AREA (เส้นประ) --- */
-    .task-area {
-      width: 90%; max-width: 380px; border: 2px dashed rgba(0,0,0,0.1); border-radius: 25px;
-      padding: 40px 20px; text-align: center; opacity: 0.6;
-    }
+    /* --- 5. ALERT & CONTROL --- */
+    .alert-banner { background: #FFEB3B; color: #856404; padding: 12px 20px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    .control-panel { background: rgba(255,255,255,0.25); border-radius: 20px; padding: 15px; margin-bottom: 15px; }
+    .toggle-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.9rem; }
 
-    /* --- 6. NAVIGATION --- */
-    .bottom-nav {
-      position: fixed; bottom: 20px; background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(15px); width: 260px; height: 65px; border-radius: 40px;
-      display: flex; justify-content: space-around; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-    .nav-item { font-size: 24px; cursor: pointer; opacity: 0.4; transition: 0.3s; }
-    .nav-item.active { opacity: 1; }
+    /* --- 6. TASK GRID --- */
+    .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .task-box { background: white; padding: 15px; border-radius: 20px; text-align: center; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .task-box.done { opacity: 0.5; background: #f0f0f0; }
+    .btn-check { background: var(--accent); color: white; border: none; padding: 6px 15px; border-radius: 12px; cursor: pointer; margin-top: 10px; font-family: 'Kanit'; width: 100%; font-weight: 500; }
 
+    /* --- 7. EMPTY STATE (DASHED) --- */
+    .task-area { border: 2px dashed rgba(0,0,0,0.1); border-radius: 25px; padding: 35px; text-align: center; opacity: 0.5; font-size: 0.85rem; letter-spacing: 1px; }
+
+    /* --- 8. FOOTER NAVIGATION & FAB --- */
     .fab {
-      position: fixed; bottom: 100px; right: 30px; background-color: var(--accent);
-      width: 60px; height: 60px; border-radius: 50%; display: flex;
-      justify-content: center; align-items: center; font-size: 30px; color: white;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15); cursor: pointer;
+      position: fixed; bottom: 105px; right: calc(50% - 170px); /* ลอยเหนือนวมด้านขวา */
+      background-color: var(--accent); width: 60px; height: 60px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      color: white; font-size: 30px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      cursor: pointer; z-index: 1001; transition: transform 0.2s;
     }
+    .fab:active { transform: scale(0.9); }
+
+    .bottom-nav {
+      position: fixed; bottom: 20px; background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 70px;
+      border-radius: 25px; display: flex; justify-content: space-around; align-items: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.3);
+      z-index: 1000;
+    }
+    .nav-item { flex: 1; text-align: center; font-size: 26px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
+    .nav-item.active { opacity: 1; }
   </style>
 </head>
 
 <body>
 
+<div class="container">
   <div class="header">
     <div>
       <h2 style="margin:0">สวัสดีเจ้าทาส! 🐾</h2>
-      <p style="margin:0; font-size: 0.8rem; opacity: 0.6;">จันทร์ที่ 20 เม.ย. 2026</p>
+      <p style="margin:0; font-size: 0.85rem; opacity: 0.7;">อังคารที่ 21 เม.ย. 2026</p>
     </div>
-    <div onclick="toggleThemeMenu()" style="cursor:pointer; font-size: 24px; background: white; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">🎨</div>
-    
+    <div onclick="toggleMenu()" style="cursor:pointer; background:white; padding:10px; border-radius:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 20px;">🎨</div>
     <div class="theme-dropdown" id="themeMenu">
-      <div class="theme-dot" style="background: #FEF7C5;" onclick="setTheme('')"></div>
-      <div class="theme-dot" style="background: #FFB4DA;" onclick="setTheme('berry')"></div>
-      <div class="theme-dot" style="background: #D5FFC9;" onclick="setTheme('sprout')"></div>
-      <div class="theme-dot" style="background: #FFF8E9;" onclick="setTheme('cream')"></div>
-      <div class="theme-dot" style="background: #F5D1EF;" onclick="setTheme('lavender')"></div>
-      <div class="theme-dot" style="background: #BCD3F9;" onclick="setTheme('ocean')"></div>
-      <div class="theme-dot" style="background: #FFF4FD;" onclick="setTheme('peach')"></div>
-      <div class="theme-dot" style="background: #FFCBBF;" onclick="setTheme('melon')"></div>
+      <div class="theme-dot" style="background:#FEF7C5" onclick="setTheme('')"></div>
+      <div class="theme-dot" style="background:#FFB4DA" onclick="setTheme('berry')"></div>
+      <div class="theme-dot" style="background:#D5FFC9" onclick="setTheme('sprout')"></div>
+      <div class="theme-dot" style="background:#FFF8E9" onclick="setTheme('cream')"></div>
+      <div class="theme-dot" style="background:#F5D1EF" onclick="setTheme('lavender')"></div>
+      <div class="theme-dot" style="background:#BCD3F9" onclick="setTheme('ocean')"></div>
+      <div class="theme-dot" style="background:#FFF4FD" onclick="setTheme('peach')"></div>
+      <div class="theme-dot" style="background:#FFCBBF" onclick="setTheme('melon')"></div>
     </div>
   </div>
 
   <div class="glass-card">
-    <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
-      <span>🎯 ความสำเร็จวันนี้</span>
-      <span>33%</span>
+    <div style="display:flex; justify-content:space-between; font-size:0.9rem; font-weight: 500;">
+      <span>🎯 ความสำเร็จวันนี้ ></span>
+      <span id="progText">0% (0 / 3 งาน)</span>
     </div>
-    <div style="background: rgba(0,0,0,0.05); height: 10px; border-radius: 10px; margin-top: 10px; overflow: hidden;">
-      <div style="background: var(--progress); width: 33%; height: 100%; transition: 0.5s;"></div>
+    <div style="background:rgba(0,0,0,0.05); height:12px; border-radius:10px; margin-top:12px; overflow:hidden;">
+      <div id="progBar" style="background:var(--progress); width:0%; height:100%; transition:0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);"></div>
     </div>
   </div>
 
   <div class="hero-card">
-    <div style="font-size: 3rem; margin-bottom: 5px;">🐱</div>
-    <div style="font-weight: 500; font-size: 1.3rem;">น้องชานม ∨</div>
-    <p style="font-size: 0.9rem; opacity: 0.7;">สุขภาพ: ปกติ | การกิน: ปกติ 🍽️</p>
+    <div style="font-weight:500; font-size: 1.2rem;">🐱 น้องชานม ∨ &nbsp; <span style="font-size:0.8rem; color:#4CAF50; background: #e8f5e9; padding: 2px 8px; border-radius: 10px;">😊 Healthy</span></div>
+    <div style="background:rgba(255,255,255,0.7); border-radius:15px; margin-top:12px; padding:8px; font-size:0.85rem; cursor: pointer;">
+      Quick Insight: กินครบ 2 วันติด 👍 >
+    </div>
+  </div>
+
+  <div class="alert-banner" id="alertBox">
+    <span>🟡 วันนี้ยังไม่ได้ล้างกระบะ</span>
+    <div style="text-decoration:underline; font-size:0.75rem; cursor:pointer;" onclick="this.parentElement.style.display='none'">[ปิด]</div>
+  </div>
+
+  <div style="font-size:0.85rem; margin-bottom:8px; opacity: 0.8; font-weight: 500;">管理 แจ้งเตือนด่วน ∨</div>
+  <div class="control-panel">
+    <div class="toggle-row"><span>⏰ อาหารเช้า 11:00</span> <b style="color:#4CAF50;">ON</b></div>
+    <div class="toggle-row"><span>⏰ ล้างกระบะ 20:00</span> <b style="color:rgba(0,0,0,0.2);">OFF</b></div>
+  </div>
+
+  <p style="font-size:1rem; font-weight:500; margin-top: 20px;">ตารางวันนี้</p>
+  
+  <div class="task-grid">
+    <div class="task-box" id="task1">
+      <div style="font-size: 1.1rem;">🥣 อาหารเช้า</div>
+      <div style="font-size:0.75rem; color:#999;">11:00</div>
+      <button class="btn-check" onclick="doTask('task1')">CHECK</button>
+    </div>
+    <div class="task-box" id="task2">
+      <div style="font-size: 1.1rem;">🧶 เล่นกัน</div>
+      <div style="font-size:0.75rem; color:#999;">15:00</div>
+      <button class="btn-check" onclick="doTask('task2')">CHECK</button>
+    </div>
+  </div>
+
+  <div class="task-box" id="task3" style="margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; padding: 15px 20px;">
+    <span>💩 ล้างกระบะ (20:00)</span>
+    <button class="btn-check" style="width: auto; margin: 0;" onclick="doTask('task3')">CHECK</button>
   </div>
 
   <div class="task-area">
-    <span style="letter-spacing: 2px;">SKY IS CLEAR ✨</span>
+    SKY IS CLEAR 🐾
   </div>
 
-  <div class="fab" onclick="alert('เพิ่มกิจกรรมใหม่')">＋</div>
+</div>
 
-  <nav class="bottom-nav">
-    <div class="nav-item active">🏠</div>
-    <div class="nav-item" onclick="alert('ไปหน้า Health')">🩺</div>
-    <div class="nav-item" onclick="alert('ไปหน้า Settings')">⚙️</div>
-  </nav>
+<div class="fab" onclick="alert('เพิ่มข้อมูลใหม่')">＋</div>
 
-  <script>
-    function toggleThemeMenu() {
-      const menu = document.getElementById('themeMenu');
-      menu.style.display = (menu.style.display === 'grid') ? 'none' : 'grid';
+<nav class="bottom-nav">
+  <div class="nav-item active">🏠</div>
+  <div class="nav-item">🩺</div>
+  <div class="nav-item">⚙️</div>
+</nav>
+
+<script>
+  let doneCount = 0;
+  const totalTasks = 3;
+
+  function toggleMenu() {
+    const m = document.getElementById('themeMenu');
+    m.style.display = m.style.display === 'grid' ? 'none' : 'grid';
+  }
+
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('themeMenu').style.display = 'none';
+  }
+
+  function doTask(id) {
+    const el = document.getElementById(id);
+    if(el.classList.contains('done')) return;
+    
+    el.classList.add('done');
+    const btn = el.querySelector('button');
+    btn.innerText = 'DONE ✔️';
+    btn.style.background = '#ccc';
+    
+    doneCount++;
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const percent = Math.round((doneCount / totalTasks) * 100);
+    document.getElementById('progBar').style.width = percent + '%';
+    document.getElementById('progText').innerText = percent + '% (' + doneCount + ' / ' + totalTasks + ' งาน)';
+  }
+
+  // ปิดเมนูธีมเมื่อคลิกที่อื่น
+  window.onclick = function(event) {
+    if (!event.target.closest('.header')) {
+      document.getElementById('themeMenu').style.display = 'none';
     }
-
-    function setTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      document.getElementById('themeMenu').style.display = 'none'; // เลือกเสร็จแล้วซ่อนเมนู
-    }
-
-    // คลิกข้างนอกเมนูให้เมนูปิด
-    window.onclick = function(event) {
-      if (!event.target.matches('.header div')) {
-        const menu = document.getElementById('themeMenu');
-        if (menu.style.display === 'grid') {
-          // menu.style.display = 'none';
-        }
-      }
-    }
-  </script>
+  }
+</script>
 
 </body>
 </html>
