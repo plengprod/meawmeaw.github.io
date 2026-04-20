@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MeawMeaw Multi-Pet & Calendar 🐾</title>
+  <title>MeawMeaw Ultimate Sync 🐾</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
   
   <style>
@@ -17,36 +17,36 @@
     [data-theme="peach"] { --bg: #FFF4FD; --hero: #FFFFFF; --accent: #FFB4DA; --progress: #D5FFC9; --text: #6B4E5E; }
     [data-theme="melon"] { --bg: #FFCBBF; --hero: #FFF5F2; --accent: #FF9B85; --progress: #FEF7C5; --text: #633E36; }
 
-    body { font-family: 'Kanit', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; transition: 0.5s; }
-    .container { width: 100%; max-width: 380px; margin: auto; }
+    body { font-family: 'Kanit', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; transition: 0.5s; display: flex; flex-direction: column; align-items: center; }
+    .container { width: 100%; max-width: 380px; }
 
     /* Header */
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .theme-dropdown { position: absolute; top: 70px; right: 20px; background: white; border-radius: 20px; padding: 12px; display: none; grid-template-columns: repeat(4, 1fr); gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 1000; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; width: 100%; }
+    .theme-dropdown { position: absolute; top: 60px; right: 0; background: white; border-radius: 20px; padding: 12px; display: none; grid-template-columns: repeat(4, 1fr); gap: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); z-index: 1000; }
     .theme-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #eee; }
 
-    /* Hero Card (Pet Switcher) */
-    .hero-card { background-color: var(--hero); padding: 25px; border-radius: 35px; text-align: center; margin-bottom: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); position: relative; }
-    .pet-selector { cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; font-size: 1.2rem; background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px; }
-
-    /* Task & Alerts */
+    /* Progress Card */
     .glass-card { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); padding: 20px; border-radius: 30px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.3); }
-    .task-box { background: white; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-    .task-box.done { opacity: 0.5; background: #f0f0f0; text-decoration: line-through; }
-    .btn-check { background: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-family: 'Kanit'; }
 
-    /* Navigation */
-    .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 70px; border-radius: 25px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); left: 50%; transform: translateX(-50%); z-index: 1000; }
-    .nav-item { flex: 1; text-align: center; font-size: 26px; cursor: pointer; opacity: 0.3; transition: 0.3s; }
+    /* Pet Hero */
+    .hero-card { background-color: var(--hero); padding: 25px; border-radius: 35px; text-align: center; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.03); }
+    .pet-name-input { background: none; border: none; font-family: 'Kanit'; font-size: 1.2rem; font-weight: 500; text-align: center; color: var(--text); width: 150px; outline: none; }
+
+    /* Task Box */
+    .task-box { background: white; padding: 15px 20px; border-radius: 25px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .task-box.done { opacity: 0.5; text-decoration: line-through; }
+    .btn-check { background: var(--accent); color: white; border: none; padding: 6px 15px; border-radius: 12px; cursor: pointer; font-family: 'Kanit'; font-weight: 500; }
+
+    /* Bottom Nav (Full Width) */
+    .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 70px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); left: 50%; transform: translateX(-50%); z-index: 1000; }
+    .nav-item { flex: 1; text-align: center; font-size: 26px; cursor: pointer; opacity: 0.3; }
     .nav-item.active { opacity: 1; }
 
-    /* Modal (Calendar/New Event) */
-    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: none; justify-content: center; align-items: flex-end; z-index: 2000; }
+    /* Modal (Calendar/Alert) */
+    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: none; justify-content: center; align-items: flex-end; z-index: 2000; }
     .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .input-group { background: #f5f5f5; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
-    .input-group input { border: none; background: none; width: 100%; font-family: 'Kanit'; font-size: 1rem; outline: none; }
-    .save-btn { background: var(--accent); color: white; border: none; width: 100%; padding: 15px; border-radius: 15px; font-size: 1.1rem; font-weight: 500; cursor: pointer; }
+    .input-row { background: #f5f5f5; border-radius: 15px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; }
+    .input-row input { border: none; background: none; font-family: 'Kanit'; outline: none; width: 100%; }
   </style>
 </head>
 
@@ -56,9 +56,9 @@
   <div class="header">
     <div>
       <h2 style="margin:0">สวัสดีเจ้าทาส! 🐾</h2>
-      <p id="currentDate" style="margin:0; font-size: 0.85rem; opacity: 0.7;"></p>
+      <p id="displayDate" style="margin:0; font-size: 0.85rem; opacity: 0.7;"></p>
     </div>
-    <div onclick="toggleMenu()" style="cursor:pointer; background:white; padding:10px; border-radius:15px; font-size: 20px;">🎨</div>
+    <div onclick="toggleMenu()" style="cursor:pointer; background:white; padding:8px; border-radius:12px;">🎨</div>
     <div class="theme-dropdown" id="themeMenu">
       <div class="theme-dot" style="background:#FEF7C5" onclick="setTheme('')"></div>
       <div class="theme-dot" style="background:#FFB4DA" onclick="setTheme('berry')"></div>
@@ -74,7 +74,7 @@
   <div class="glass-card">
     <div style="display:flex; justify-content:space-between; font-size:0.9rem;">
       <span>🎯 ความสำเร็จวันนี้ ></span>
-      <span id="progText">0% (0 งาน)</span>
+      <span id="progText">0% (0 / 1 งาน)</span>
     </div>
     <div style="background:rgba(0,0,0,0.05); height:10px; border-radius:10px; margin-top:10px; overflow:hidden;">
       <div id="progBar" style="background:var(--progress); width:0%; height:100%; transition:0.5s;"></div>
@@ -82,124 +82,106 @@
   </div>
 
   <div class="hero-card">
-    <div style="font-size: 3.5rem; margin-bottom: 10px;" onclick="switchPet()">🐱</div>
-    <div class="pet-selector" onclick="switchPet()">
-      <span id="petName">น้องชานม</span> <span>∨</span>
-    </div>
-    <div style="margin-top:10px; font-size:0.85rem; color:#4CAF50;">😊 Healthy | กินครบ 2 วันติด 👍</div>
+    <div style="font-size: 3.5rem; cursor: pointer;" onclick="switchPet()">🐱</div>
+    <input type="text" class="pet-name-input" id="petName" value="น้องชานม">
+    <p style="font-size: 0.85rem; color: #4CAF50; margin-top: 5px;">😊 Healthy</p>
   </div>
 
   <p style="font-weight:500; margin-bottom:10px;">ตารางวันนี้</p>
   <div id="taskList">
     <div class="task-box">
       <span>🥣 อาหารเช้า (11:00)</span>
-      <button class="btn-check" onclick="markDone(this)">CHECK</button>
+      <button class="btn-check" onclick="checkTask(this)">CHECK</button>
     </div>
-  </div>
-
-  <div style="border: 2px dashed rgba(0,0,0,0.1); border-radius: 25px; padding: 30px; text-align: center; opacity: 0.5; font-size: 0.85rem;">
-    SKY IS CLEAR 🐾
   </div>
 </div>
 
-<div class="modal" id="calendarModal">
+<div class="modal" id="calModal">
   <div class="modal-content">
-    <div class="modal-header">
-      <span style="font-size: 1.5rem; font-weight: 500;" onclick="closeModal()">✕</span>
-      <span style="font-size: 1.2rem; font-weight: 500;">กิจกรรมใหม่</span>
-      <span style="font-size: 1.5rem; color: var(--accent);" onclick="saveTask()">✔</span>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <span onclick="closeCal()" style="font-size:1.5rem; cursor:pointer;">✕</span>
+      <b style="font-size:1.1rem;">สร้างการแจ้งเตือน</b>
+      <span onclick="saveTask()" style="color:var(--accent); font-size:1.5rem; cursor:pointer;">✔</span>
     </div>
     
-    <div class="input-group">
-      <input type="text" id="newTaskTitle" placeholder="ชื่อกิจกรรม เช่น ล้างกระบะ">
-    </div>
-    <div class="input-group">
-      <input type="text" placeholder="โน้ตเพิ่มเติม">
-    </div>
+    <div class="input-row"><input type="text" id="taskTitle" placeholder="ชื่อกิจกรรม"></div>
     
-    <div style="background: #f9f9f9; padding: 15px; border-radius: 20px; margin-bottom: 20px;">
-      <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
-        <span>📅 วันที่</span>
-        <span style="color:red;">พุธที่ 22 เม.ย. 2569</span>
+    <div style="background:#f9f9f9; padding:20px; border-radius:20px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+        <span>📅 วันที่</span> 
+        <input type="date" id="taskDate" style="font-family:'Kanit'; border:1px solid #ddd; border-radius:8px; padding:5px;">
       </div>
-      <div style="display:flex; justify-content:space-between;">
-        <span>⏰ เวลา</span>
-        <input type="time" id="newTaskTime" style="border:none; background:none; font-family:'Kanit';">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span>⏰ เวลา</span> 
+        <input type="time" id="taskTime" style="font-family:'Kanit'; border:1px solid #ddd; border-radius:8px; padding:5px;">
       </div>
     </div>
 
-    <button class="save-btn" onclick="saveTask()">เพิ่มเข้าหน้าโฮม</button>
+    <button onclick="saveTask()" style="background:var(--accent); color:white; border:none; width:100%; padding:15px; border-radius:15px; font-weight:500;">ตกลง</button>
   </div>
 </div>
 
 <nav class="bottom-nav">
-  <div class="nav-item active">🏠</div>
-  <div class="nav-item" onclick="openModal()">📅</div>
+  <div class="nav-item active" onclick="location.reload()">🏠</div>
+  <div class="nav-item" onclick="openCal()">📅</div>
   <div class="nav-item">⚙️</div>
 </nav>
 
 <script>
-  let tasks = 1;
-  let done = 0;
-  const pets = ["น้องชานม", "น้องม็อคค่า", "น้องลาเต้"];
-  let currentPetIdx = 0;
-
-  // ตั้งค่าวันที่ปัจจุบัน
-  document.getElementById('currentDate').innerText = new Date().toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  let total = 1, done = 0;
+  
+  // แสดงวันที่ปัจจุบันในหน้า Home
+  const now = new Date();
+  document.getElementById('displayDate').innerText = now.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  // Set default date ใน Modal เป็นวันนี้
+  document.getElementById('taskDate').valueAsDate = now;
 
   function toggleMenu() {
     const m = document.getElementById('themeMenu');
     m.style.display = m.style.display === 'grid' ? 'none' : 'grid';
   }
-
   function setTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     document.getElementById('themeMenu').style.display = 'none';
   }
-
-  // ระบบสลับสัตว์เลี้ยง
-  function switchPet() {
-    currentPetIdx = (currentPetIdx + 1) % pets.length;
-    document.getElementById('petName').innerText = pets[currentPetIdx];
-    // มึงสามารถเพิ่ม logic เปลี่ยนรูปแมวตรงนี้ได้
-  }
-
-  // ระบบปฏิทิน & แจ้งเตือน
-  function openModal() { document.getElementById('calendarModal').style.display = 'flex'; }
-  function closeModal() { document.getElementById('calendarModal').style.display = 'none'; }
+  function openCal() { document.getElementById('calModal').style.display = 'flex'; }
+  function closeCal() { document.getElementById('calModal').style.display = 'none'; }
 
   function saveTask() {
-    const title = document.getElementById('newTaskTitle').value;
-    const time = document.getElementById('newTaskTime').value;
+    const title = document.getElementById('taskTitle').value;
+    const dateInput = document.getElementById('taskDate').value;
+    const time = document.getElementById('taskTime').value;
+    
     if(!title) return alert("ใส่ชื่อกิจกรรมด้วยมึง!");
 
-    const taskHTML = `
+    // แปลงรูปแบบวันที่ให้ดูง่ายขึ้น
+    const d = new Date(dateInput);
+    const dateStr = d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+
+    const html = `
       <div class="task-box">
-        <span>⏰ ${title} (${time || 'ไม่ระบุเวลา'})</span>
-        <button class="btn-check" onclick="markDone(this)">CHECK</button>
+        <div>
+          <div style="font-weight:500;">${title}</div>
+          <div style="font-size:0.75rem; color:#999;">📅 ${dateStr} | ⏰ ${time || 'ไม่ระบุ'}</div>
+        </div>
+        <button class="btn-check" onclick="checkTask(this)">CHECK</button>
       </div>
     `;
-    document.getElementById('taskList').innerHTML += taskHTML;
-    tasks++;
-    updateProgress();
-    closeModal();
-    document.getElementById('newTaskTitle').value = ""; // reset
+    document.getElementById('taskList').insertAdjacentHTML('afterbegin', html);
+    total++; updateProg(); closeCal();
   }
 
-  function markDone(btn) {
-    const box = btn.parentElement;
+  function checkTask(btn) {
+    const box = btn.closest('.task-box');
     if(box.classList.contains('done')) return;
-    box.classList.add('done');
-    btn.innerText = "DONE ✔️";
-    btn.style.background = "#ccc";
-    done++;
-    updateProgress();
+    box.classList.add('done'); btn.innerText = "DONE ✔️"; btn.style.background = "#ccc";
+    done++; updateProg();
   }
 
-  function updateProgress() {
-    const p = Math.round((done / tasks) * 100);
+  function updateProg() {
+    const p = Math.round((done / total) * 100);
     document.getElementById('progBar').style.width = p + '%';
-    document.getElementById('progText').innerText = `${p}% (${done} / ${tasks} งาน)`;
+    document.getElementById('progText').innerText = `${p}% (${done} / ${total} งาน)`;
   }
 </script>
 
