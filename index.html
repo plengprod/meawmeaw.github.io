@@ -3,19 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MeawMeaw App 🐾</title>
+  <title>MeawMeaw Ultimate 🐾</title>
   <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   
   <style>
-    /* --- 1. THEME ENGINE --- */
+    /* --- 1. THEME ENGINE (สีที่มึงส่งมาเป๊ะๆ) --- */
     :root { --bg: #FEF7C5; --hero: #FFFCE6; --accent: #F3D617; --progress: #BCD3F9; --text: #5D5632; }
     [data-theme="berry"] { --bg: #FFB4DA; --hero: #FFF0F7; --accent: #FF8FAB; --progress: #F5D1EF; --text: #633B4D; }
     [data-theme="sprout"] { --bg: #D5FFC9; --hero: #F2FFE0; --accent: #86D071; --progress: #FFCBBF; --text: #3D5238; }
-    [data-theme="cream"] { --bg: #FFF8E9; --hero: #FFFFFF; --accent: #F9D99A; --progress: #F5D1EF; --text: #6B5D44; }
-    [data-theme="lavender"] { --bg: #F5D1EF; --hero: #FDF5FF; --accent: #D6A4D1; --progress: #D5FFC9; --text: #564053; }
     [data-theme="ocean"] { --bg: #BCD3F9; --hero: #F0F5FF; --accent: #8EB1E6; --progress: #FEF7C5; --text: #3A4B6B; }
-    [data-theme="peach"] { --bg: #FFF4FD; --hero: #FFFFFF; --accent: #FFB4DA; --progress: #D5FFC9; --text: #6B4E5E; }
-    [data-theme="melon"] { --bg: #FFCBBF; --hero: #FFF5F2; --accent: #FF9B85; --progress: #FEF7C5; --text: #633E36; }
+    [data-theme="lavender"] { --bg: #F5D1EF; --hero: #FDF5FF; --accent: #D6A4D1; --progress: #D5FFC9; --text: #564053; }
 
     body { font-family: 'Itim', cursive; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; transition: 0.5s; }
     .container { width: 100%; max-width: 380px; margin: auto; }
@@ -25,32 +22,28 @@
     .app-page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* --- UI ELEMENTS หน้าแรก (Dashboard) --- */
+    .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border-radius: 30px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.3); }
+    .profile-card { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 15px; }
+    .stat-box { background: white; border-radius: 25px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    
+    /* Pet & Tasks */
+    .hero-card { background-color: var(--hero); padding: 20px; border-radius: 35px; text-align: center; margin-bottom: 15px; }
+    .task-item { background: white; padding: 15px 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .btn-check { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 12px; font-family: 'Itim'; cursor: pointer; }
+    .empty-state { border: 2px dashed rgba(0,0,0,0.1); border-radius: 20px; padding: 30px; text-align: center; opacity: 0.4; }
+
     /* --- CALENDAR STYLE --- */
-    .cal-card { background: white; border-radius: 35px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: bold; font-size: 1.2rem; }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; text-align: center; }
-    .day-name { font-size: 0.7rem; opacity: 0.4; margin-bottom: 10px; }
-    .day { padding: 10px 0; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
-    .day:hover { background: var(--bg); }
+    .cal-card { background: white; border-radius: 35px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
+    .day { padding: 10px 0; border-radius: 50%; cursor: pointer; font-size: 0.9rem; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
     .day.active { background: var(--accent); color: white; font-weight: bold; }
-    .day.today { border: 2px solid var(--accent); }
 
-    /* Input Style */
-    .input-group { background: rgba(255,255,255,0.5); padding: 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.3); }
-    input, select { 
-      width: 100%; border: none; background: white; padding: 12px 15px; border-radius: 15px; 
-      font-family: 'Itim'; margin-bottom: 10px; box-sizing: border-box; color: var(--text);
-    }
-    .btn-save { 
-      width: 100%; padding: 15px; background: var(--accent); color: white; border: none; 
-      border-radius: 20px; font-family: 'Itim'; font-size: 1rem; cursor: pointer; transition: 0.3s;
-    }
-    .btn-save:active { transform: scale(0.95); }
-
-    /* Navigation */
-    .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 75px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; left: 50%; transform: translateX(-50%); box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000; }
-    .nav-item { flex: 1; text-align: center; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1.5rem; }
-    .nav-item.active { opacity: 1; transform: scale(1.1); }
+    /* Bottom Nav */
+    .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 70px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; left: 50%; transform: translateX(-50%); box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+    .nav-item { cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1.4rem; }
+    .nav-item.active { opacity: 1; transform: scale(1.2); }
   </style>
 </head>
 
@@ -59,54 +52,65 @@
 <div class="container">
 
   <div id="home" class="app-page active">
-    <h2>สวัสดีเจ้าทาส! 🐾</h2>
-    <div style="background:white; padding:20px; border-radius:30px; text-align:center; margin-bottom:20px;">
-       <p>จิ้มเพื่อเปลี่ยนธีม (สีจะเปลี่ยนทั้งแอป)</p>
-       <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
-         <div onclick="setTheme('')" style="height:30px; background:#FEF7C5; border-radius:50%; cursor:pointer;"></div>
-         <div onclick="setTheme('berry')" style="height:30px; background:#FFB4DA; border-radius:50%; cursor:pointer;"></div>
-         <div onclick="setTheme('sprout')" style="height:30px; background:#D5FFC9; border-radius:50%; cursor:pointer;"></div>
-         <div onclick="setTheme('ocean')" style="height:30px; background:#BCD3F9; border-radius:50%; cursor:pointer;"></div>
-       </div>
+    <div class="glass-card profile-card">
+      <div>
+        <h1 style="margin:0; font-size:1.8rem; letter-spacing:1px;">TEST <small style="font-size:0.8rem; opacity:0.5; font-weight:normal; border:1px solid #ddd; padding:2px 8px; border-radius:10px;">GUEST</small></h1>
+        <p style="margin:0; font-size:0.8rem; opacity:0.6;">— C H E C K Q</p>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:0.8rem; opacity:0.5;">Profile</div>
+        <div style="font-size:1.5rem;">👤</div>
+      </div>
     </div>
-    <div class="cal-card" style="text-align:center;">
-       <p>หน้า Home ของมึง (โค้ดเก่ามึงใส่ตรงนี้ได้เลย)</p>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div style="font-size:0.6rem; opacity:0.5;">NEXT QUEUE</div>
+        <div style="font-size:1.5rem; font-weight:bold;">21</div>
+        <div style="font-size:0.6rem; opacity:0.5;">APR 2026</div>
+      </div>
+      <div class="stat-box">
+        <div style="font-size:0.6rem; opacity:0.5;">จำนวนคิวก่อนหน้า</div>
+        <div style="border: 2px solid var(--accent); width:35px; height:35px; border-radius:50%; margin:5px auto; display:flex; align-items:center; justify-content:center; font-weight:bold;">3</div>
+        <div style="font-size:0.6rem; opacity:0.5;">คิว</div>
+      </div>
+      <div class="stat-box">
+        <div style="font-size:0.6rem; opacity:0.5;">ความสำเร็จวันนี้</div>
+        <div style="font-size:1.2rem; margin:8px 0;">🎯</div>
+        <div style="font-size:0.7rem; font-weight:bold;"><span id="progText">0%</span> • <span id="jobCount">0/0</span> งาน</div>
+      </div>
     </div>
+
+    <div class="hero-card">
+      <div style="font-size:3rem;" id="petEmoji">🐱</div>
+      <div onclick="nextPet()" style="cursor:pointer; font-size:1.2rem; font-weight:bold;">Name </div>
+      <p style="font-size:0.8rem; color:#4CAF50; margin-top:5px;">😊 Healthy | กินครบ 2 วันติด 👍</p>
+    </div>
+
+    <p style="font-weight:bold; margin:20px 0 10px; opacity:0.6; font-size:0.9rem;">TODAY'S TASK ——————</p>
+    <div id="taskList">
+      </div>
+    <div id="emptyState" class="empty-state">SKY IS CLEAR ✨</div>
   </div>
 
   <div id="calendar" class="app-page">
-    <h2 style="text-align:center;">📅 ปฏิทิน</h2>
-    
+    <h2 style="text-align:center;">📅 ปฏิทินกิจกรรม</h2>
     <div class="cal-card">
-      <div class="cal-header">
-        <span onclick="alert('ย้อนกลับ')">◀</span>
-        <span>April 2026</span>
-        <span onclick="alert('ถัดไป')">▶</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; font-weight:bold;">
+        <span>◀</span> <span>April 2026</span> <span>▶</span>
       </div>
-      
-      <div class="cal-grid">
-        <div class="day-name">SUN</div><div class="day-name">MON</div><div class="day-name">TUE</div><div class="day-name">WED</div>
-        <div class="day-name">THU</div><div class="day-name">FRI</div><div class="day-name">SAT</div>
-        
-        <div class="day" style="opacity:0.2">29</div><div class="day" style="opacity:0.2">30</div><div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div>
-        <div class="day">6</div><div class="day">7</div><div class="day">8</div><div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div>
-        <div class="day">13</div><div class="day">14</div><div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div>
-        <div class="day">20</div><div class="day active today">21</div><div class="day">22</div><div class="day">23</div><div class="day">24</div><div class="day">25</div><div class="day">26</div>
-        <div class="day">27</div><div class="day">28</div><div class="day">29</div><div class="day">30</div><div class="day" style="opacity:0.2">1</div><div class="day" style="opacity:0.2">2</div><div class="day" style="opacity:0.2">3</div>
-      </div>
+      <div class="cal-grid" id="calDays">
+        </div>
     </div>
 
-    <div class="input-group">
-      <p style="margin-top:0; font-weight:bold;">🕒 ตั้งค่ากิจกรรมวันที่ 21</p>
-      <input type="text" placeholder="ชื่อกิจกรรม (เช่น ให้อาหารชานม)">
-      <div style="display:flex; gap:10px;">
-        <input type="time" value="11:00" style="flex:1;">
-        <select style="flex:1;">
-          <option>เตือนล่วงหน้า 5 นาที</option>
-          <option>เตือนเมื่อถึงเวลา</option>
-        </select>
-      </div>
-      <button class="btn-save" onclick="alert('บันทึกแล้วมึง!')">บันทึกกิจกรรม</button>
+    <div class="glass-card" style="margin-top:20px;">
+       <p style="margin-top:0;"><b>🎨 เปลี่ยนธีมสี</b></p>
+       <div style="display:flex; gap:15px; justify-content:center;">
+         <div onclick="setTheme('')" style="width:35px; height:35px; background:#FEF7C5; border-radius:50%; cursor:pointer; border:2px solid white;"></div>
+         <div onclick="setTheme('berry')" style="width:35px; height:35px; background:#FFB4DA; border-radius:50%; cursor:pointer; border:2px solid white;"></div>
+         <div onclick="setTheme('sprout')" style="width:35px; height:35px; background:#D5FFC9; border-radius:50%; cursor:pointer; border:2px solid white;"></div>
+         <div onclick="setTheme('ocean')" style="width:35px; height:35px; background:#BCD3F9; border-radius:50%; cursor:pointer; border:2px solid white;"></div>
+       </div>
     </div>
   </div>
 
@@ -115,30 +119,57 @@
 <nav class="bottom-nav">
   <div class="nav-item active" onclick="switchPage('home', this)">🏠</div>
   <div class="nav-item" onclick="switchPage('calendar', this)">📅</div>
-  <div class="nav-item">⚙️</div>
+  <div class="nav-item" onclick="switchPage('settings', this)">⚙️</div>
 </nav>
 
 <script>
-  function switchPage(pageId, el) {
+  let petData = [
+    { name: "น้องชานม", emoji: "🐱", tasks: [{title: "อาหารเช้า (11:00)", done: false}, {title: "ล้างกระบะทราย", done: false}] },
+    { name: "น้องม็อคค่า", emoji: "🐶", tasks: [{title: "พาวิ่งเล่น", done: false}] }
+  ];
+  let currentIdx = 0;
+
+  function renderHome() {
+    const pet = petData[currentIdx];
+    document.getElementById('petName').innerText = pet.name + " ∨";
+    document.getElementById('petEmoji').innerText = pet.emoji;
+    
+    const list = document.getElementById('taskList');
+    list.innerHTML = "";
+    let done = 0;
+
+    pet.tasks.forEach((t, i) => {
+      if(t.done) done++;
+      list.innerHTML += `
+        <div class="task-item" style="${t.done?'opacity:0.5':''}">
+          <span>${t.done?'✔️':'🥣'} ${t.title}</span>
+          <button class="btn-check" onclick="toggleTask(${i})">${t.done?'DONE':'CHECK'}</button>
+        </div>`;
+    });
+
+    document.getElementById('emptyState').style.display = pet.tasks.length ? 'none' : 'block';
+    const percent = pet.tasks.length ? Math.round((done/pet.tasks.length)*100) : 0;
+    document.getElementById('progText').innerText = percent + "%";
+    document.getElementById('jobCount').innerText = `${done}/${pet.tasks.length}`;
+  }
+
+  function toggleTask(i) { petData[currentIdx].tasks[i].done = !petData[currentIdx].tasks[i].done; renderHome(); }
+  function nextPet() { currentIdx = (currentIdx + 1) % petData.length; renderHome(); }
+  function switchPage(id, el) {
     document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
+    document.getElementById(id).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
   }
+  function setTheme(t) { document.documentElement.setAttribute('data-theme', t); }
 
-  function setTheme(themeName) {
-    document.documentElement.setAttribute('data-theme', themeName);
+  // เจนปฏิทินแบบง่าย
+  const cal = document.getElementById('calDays');
+  for(let i=1; i<=30; i++) {
+    cal.innerHTML += `<div class="day ${i==21?'active':''}">${i}</div>`;
   }
 
-  // ตัวอย่างกดเลือกวันที่ (Logic จริงต้องใช้ JS Date)
-  document.querySelectorAll('.day').forEach(day => {
-    day.addEventListener('click', function() {
-      if(this.innerText && this.style.opacity != "0.2") {
-        document.querySelectorAll('.day').forEach(d => d.classList.remove('active'));
-        this.classList.add('active');
-      }
-    });
-  });
+  renderHome();
 </script>
 
 </body>
