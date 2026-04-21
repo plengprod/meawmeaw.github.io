@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   
   <style>
-    /* --- THEME ENGINE --- */
+    /* --- 1. THEME ENGINE (คงเดิมเป๊ะ) --- */
     :root { --bg: #FEF7C5; --hero: #FFFCE6; --accent: #F3D617; --progress: #BCD3F9; --text: #5D5632; }
     [data-theme="berry"] { --bg: #FFB4DA; --hero: #FFF0F7; --accent: #FF8FAB; --progress: #F5D1EF; --text: #633B4D; }
     [data-theme="sprout"] { --bg: #D5FFC9; --hero: #F2FFE0; --accent: #86D071; --progress: #FFCBBF; --text: #3D5238; }
@@ -16,44 +16,45 @@
     body { font-family: 'Itim', cursive; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; transition: 0.5s; overflow-x: hidden; }
     .container { width: 100%; max-width: 380px; margin: auto; }
 
+    /* Page System */
     .app-page { display: none; width: 100%; animation: fadeIn 0.3s ease; }
     .app-page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* UI ELEMENTS */
+    /* UI ELEMENTS หน้าแรก */
     .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border-radius: 30px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.3); }
-    .stat-box { background: white; border-radius: 25px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer; }
-    .heart-progress { width: 45px; height: 45px; margin: 5px auto; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: 0.3s; }
-    .heart-progress.filled { color: #FF8FAB; text-shadow: 0 0 10px rgba(255,143,171,0.5); }
+    .profile-card { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 15px; }
+    .stat-box { background: white; border-radius: 25px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    
+    .heart-progress { width: 45px; height: 45px; margin: 5px auto; position: relative; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ccc; transition: 0.3s; }
+    .heart-progress.filled { color: #FF8FAB; box-shadow: 0 0 10px rgba(255,143,171,0.5); }
+    .heart-progress::after { content: '🧡'; position: absolute; opacity: 0; transition: 0.3s; }
+    .heart-progress.filled::after { opacity: 1; content: '❤️'; }
 
-    /* Toggle & Inputs */
-    .toggle-switch { width: 45px; height: 24px; background: #ddd; border-radius: 20px; position: relative; cursor: pointer; }
+    .alert-banner { background: #FFEB3B; color: #856404; padding: 15px; border-radius: 20px; font-size: 0.9rem; margin-bottom: 15px; display: flex; justify-content: space-between; }
+    .toggle-switch { width: 45px; height: 24px; background: #ddd; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; }
     .toggle-switch.on { background: #4CAF50; }
     .toggle-switch::before { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
     .toggle-switch.on::before { left: 24px; }
 
-    .input-center { text-align: center; width: 100%; border: none; background: white; padding: 15px; border-radius: 20px; font-family: 'Itim'; font-size: 1.1rem; margin-bottom: 15px; box-sizing: border-box; }
-    .time-mini-group { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 15px; }
-    .time-input { width: 60px; text-align: center; border: none; background: white; padding: 10px; border-radius: 15px; font-family: 'Itim'; font-size: 1.2rem; }
+    .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .task-box { background: white; padding: 15px; border-radius: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .btn-check { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 12px; width: 100%; margin-top: 10px; font-family: 'Itim'; cursor: pointer; }
 
-    /* Pop-up Custom */
+    /* Pop-up System */
     #catPopup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
-    .popup-box { background: white; padding: 25px; border-radius: 35px; width: 80%; max-width: 300px; text-align: center; animation: popScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    @keyframes popScale { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .btn-pop { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 15px; font-family: 'Itim'; cursor: pointer; font-weight: bold; }
+    .popup-box { background: white; padding: 25px; border-radius: 35px; width: 80%; max-width: 300px; text-align: center; }
 
-    /* Lists */
-    .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .task-box { background: white; padding: 15px; border-radius: 25px; text-align: center; }
-    .task-row { background: white; padding: 15px 20px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .btn-check { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; width: 100%; margin-top: 8px; font-family: 'Itim'; }
-    .btn-star { background: none; border: none; font-size: 1.3rem; cursor: pointer; opacity: 0.2; }
-    .btn-star.active { opacity: 1; }
-
-    /* Nav */
+    /* Bottom Nav */
     .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 75px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; left: 50%; transform: translateX(-50%); box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000; }
     .nav-item { cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1.5rem; }
-    .nav-item.active { opacity: 1; color: var(--accent); }
+    .nav-item.active { opacity: 1; transform: scale(1.1); color: var(--accent); }
+    
+    /* New Inputs */
+    .input-center { text-align: center; width: 100%; border: 1px solid #ddd; padding: 15px; border-radius: 20px; font-family: 'Itim'; margin-bottom: 15px; box-sizing: border-box; }
+    .btn-star { background: none; border: none; font-size: 1.2rem; cursor: pointer; opacity: 0.2; }
+    .btn-star.active { opacity: 1; }
   </style>
 </head>
 
@@ -61,37 +62,52 @@
 
 <div id="catPopup">
   <div class="popup-box">
-    <div style="font-size: 3rem;">🐾</div>
-    <h3>งานนี้ด่วนมั้ยเจ้าทาส?</h3>
-    <p style="font-size: 0.9rem; opacity: 0.6;">ถ้าด่วนจะเอาไปแปะหน้าโฮมให้เลย!</p>
-    <button class="btn-pop" style="background: var(--accent); color: white;" onclick="finalizeTask(true)">ด่วนสิ! (โชว์หน้าโฮม)</button>
-    <button class="btn-pop" style="background: #eee;" onclick="finalizeTask(false)">ไม่ด่วน (แค่เก็บไว้เช็ค)</button>
+    <h3>งานนี้ด่วนมั้ยเจ้าทาส? 🐾</h3>
+    <button onclick="finalizeTask(true)" style="width:100%; padding:12px; background:var(--accent); border:none; border-radius:15px; margin-bottom:10px; font-family:'Itim';">ด่วน (โชว์หน้าโฮม)</button>
+    <button onclick="finalizeTask(false)" style="width:100%; padding:12px; background:#eee; border:none; border-radius:15px; font-family:'Itim';">ไม่ด่วน (แอบไว้เช็ค)</button>
   </div>
 </div>
 
 <div class="container">
 
   <div id="home" class="app-page active">
-    <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
-      <div><h1 style="margin:0;">ไงเจ้าทาส ! 🐾</h1><p style="margin:0; opacity:0.6;">— C H E C K Q</p></div>
-      <div style="display:flex; gap:5px;">
-        <div onclick="setTheme('')" style="width:20px; height:20px; background:#FEF7C5; border-radius:50%; border:1px solid #ddd;"></div>
-        <div onclick="setTheme('berry')" style="width:20px; height:20px; background:#FFB4DA; border-radius:50%; border:1px solid #ddd;"></div>
-        <div onclick="setTheme('sprout')" style="width:20px; height:20px; background:#D5FFC9; border-radius:50%; border:1px solid #ddd;"></div>
-        <div onclick="setTheme('ocean')" style="width:20px; height:20px; background:#BCD3F9; border-radius:50%; border:1px solid #ddd;"></div>
+    <div class="glass-card profile-card">
+      <div>
+        <h1 style="margin:0; font-size:1.8rem;">ไงเจ้าทาส ! 🐾</h1>
+        <p style="margin:0; opacity:0.6; font-size:0.8rem;">— C H E C K Q</p>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:0.8rem; opacity:0.5; margin-bottom:5px;">เลือกธีมสีตรงนี้</div>
+        <div style="display:flex; gap:8px;">
+          <div onclick="setTheme('')" style="width:25px; height:25px; background:#FEF7C5; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
+          <div onclick="setTheme('berry')" style="width:25px; height:25px; background:#FFB4DA; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
+          <div onclick="setTheme('sprout')" style="width:25px; height:25px; background:#D5FFC9; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
+          <div onclick="setTheme('ocean')" style="width:25px; height:25px; background:#BCD3F9; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
+        </div>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 15px;">
-      <div class="stat-box"><div>21</div><div style="font-size: 0.6rem;">APR 2026</div></div>
-      <div class="stat-box" onclick="switchPage('check-page', document.getElementById('nav-check'))">
-        <div id="remainingCount" style="font-size: 1.2rem; font-weight: bold;">0</div>
-        <div style="font-size: 0.6rem;">ต้องเช็ค (คลิกดู)</div>
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div style="font-size:0.6rem; opacity:0.5;">NEXT QUEUE</div>
+        <div style="font-size:1.5rem; font-weight:bold;">21</div>
+        <div style="font-size:0.6rem; opacity:0.5;">APR 2026</div>
+      </div>
+      <div class="stat-box" onclick="switchPage('check-page', document.getElementById('nav-check'))" style="cursor:pointer;">
+        <div style="font-size:0.6rem; opacity:0.5;">ตารางที่เหลือวันนี้</div>
+        <div style="border: 2px solid var(--accent); width:35px; height:35px; border-radius:50%; margin:5px auto; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.2rem;" id="remainingCount">3</div>
+        <div style="font-size:0.6rem; opacity:0.5;">CHECK (คลิกดู)</div>
       </div>
       <div class="stat-box">
+        <div style="font-size:0.6rem; opacity:0.5;">เสร็จเท่านี้แล้วทาสเก่งมาก</div>
         <div class="heart-progress" id="heartVisual">🧡</div>
-        <div id="progText" style="font-size: 0.7rem;">0%</div>
+        <div style="font-size:0.7rem; font-weight:bold;"><span id="progText">0%</span></div>
       </div>
+    </div>
+
+    <div class="alert-banner" id="alertBox">
+      <span>🟡 วันนี้ยังไม่ได้ล้างกระบะ</span>
+      <span onclick="this.parentElement.remove()" style="cursor:pointer; opacity:0.5;">X ปิด</span>
     </div>
 
     <div style="font-size:0.9rem; margin-bottom:8px; opacity: 0.8;">管理 แจ้งเตือนด่วน ∨</div>
@@ -102,10 +118,9 @@
       </div>
     </div>
 
-    <p style="font-weight:bold;">ตารางวันนี้ ⭐️</p>
+    <p style="font-weight:bold; margin: 20px 0 10px;">ตารางวันนี้ (เฉพาะงานด่วน)</p>
     <div id="taskGrid" class="task-grid"></div>
     <div id="fullTaskContainer"></div>
-    <div id="homeEmpty" style="text-align: center; opacity: 0.3; padding: 20px;">ไม่มีงานด่วนจ้า ☕️</div>
   </div>
 
   <div id="check-page" class="app-page">
@@ -114,24 +129,28 @@
   </div>
 
   <div id="calendar" class="app-page">
-    <h2 style="text-align:center;">📅 จัดตาราง</h2>
-    <div class="glass-card" style="text-align:center;">
-       <input type="text" id="tTitle" class="input-center" placeholder="ชื่อกิจกรรม...">
-       <div class="time-mini-group">
-         <input type="text" id="timeH" class="time-input" placeholder="00"> <span>:</span>
-         <input type="text" id="timeM" class="time-input" placeholder="00">
-       </div>
-       <select id="tType" style="width:100%; padding:10px; border-radius:15px; border:none; margin-bottom:15px; font-family:'Itim';">
-         <option value="grid">แบบคู่ (Grid)</option>
-         <option value="full">แบบแถว (Full)</option>
-       </select>
-       <button onclick="askUrgency()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:20px; font-family:'Itim'; color:white; font-weight:bold;">บันทึกลงตาราง</button>
+    <h2 style="text-align:center;">📅 จัดตารางให้เจ้านาย</h2>
+    <div class="glass-card" style="background:white; border-radius:35px; text-align:center;">
+      <p style="font-weight:bold;">April 2026</p>
+      <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:5px;">
+        <div style="padding:10px;">19</div><div style="padding:10px;">20</div>
+        <div style="background:var(--accent); color:white; border-radius:50%; padding:10px;">21</div>
+        <div style="padding:10px;">22</div><div style="padding:10px;">23</div>
+      </div>
     </div>
-  </div>
-
-  <div id="settings" class="app-page">
-    <h2 style="text-align:center;">⚙️ ตั้งค่า</h2>
-    <div class="glass-card" style="text-align:center; cursor:pointer;" onclick="location.reload()">ล้างข้อมูลใหม่</div>
+    <div class="glass-card" style="margin-top:20px; text-align:center;">
+       <input type="text" id="tTitle" class="input-center" placeholder="ชื่อกิจกรรม...">
+       <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:15px;">
+         <input type="text" id="tH" style="width:50px; text-align:center; padding:10px; border-radius:10px; border:1px solid #ddd;" placeholder="00">
+         <b>:</b>
+         <input type="text" id="tM" style="width:50px; text-align:center; padding:10px; border-radius:10px; border:1px solid #ddd;" placeholder="00">
+       </div>
+       <select id="tType" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px; font-family:'Itim';">
+         <option value="grid">ช่องคู่ (Grid)</option>
+         <option value="full">แถวยาว (Full)</option>
+       </select>
+       <button onclick="askUrgency()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:15px; font-family:'Itim'; color:white; font-weight:bold;">บันทึกลงตาราง</button>
+    </div>
   </div>
 
 </div>
@@ -140,23 +159,61 @@
   <div class="nav-item active" onclick="switchPage('home', this)">🏠</div>
   <div id="nav-check" class="nav-item" onclick="switchPage('check-page', this)">📋</div>
   <div class="nav-item" onclick="switchPage('calendar', this)">📅</div>
-  <div class="nav-item" onclick="switchPage('settings', this)">⚙️</div>
+  <div class="nav-item">⚙️</div>
 </nav>
 
 <script>
-  let tasks = [
+  let petTasks = [
     { title: "อาหารเช้า", time: "11:00", type: "grid", done: false, showHome: true },
     { title: "เล่นกัน", time: "15:00", type: "grid", done: false, showHome: true },
     { title: "ล้างกระบะ", time: "20:00", type: "full", done: false, showHome: true }
   ];
   let tempTask = null;
 
+  function renderHome() {
+    const gridCont = document.getElementById('taskGrid');
+    const fullCont = document.getElementById('fullTaskContainer');
+    const checkCont = document.getElementById('checkListContainer');
+    gridCont.innerHTML = ""; fullCont.innerHTML = ""; checkCont.innerHTML = "";
+
+    let doneCount = 0; let remaining = 0;
+    petTasks.forEach((t, i) => {
+      if(!t.done) remaining++; else doneCount++;
+
+      // หน้า Check Page
+      checkCont.innerHTML += `
+        <div style="background:white; padding:15px; border-radius:20px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div><b>${t.time}</b> ${t.title}</div>
+          <button class="btn-star ${t.showHome?'active':''}" onclick="toggleStar(${i})">⭐️</button>
+        </div>`;
+
+      // หน้า Home
+      if(t.showHome) {
+        const html = `
+          <div class="task-box" style="${t.type==='full'?'display:flex; justify-content:space-between; align-items:center; padding:15px 25px; margin-bottom:10px;':''}">
+            <div style="${t.type==='full'?'text-align:left;':''}">
+              <div>${t.title}</div><div style="font-size:0.8rem; opacity:0.5;">${t.time}</div>
+            </div>
+            <button class="btn-check" style="${t.type==='full'?'width:80px; margin:0;':''}" onclick="toggleTask(${i})">${t.done?'DONE':'CHECK'}</button>
+          </div>`;
+        if(t.type === 'grid') gridCont.insertAdjacentHTML('beforeend', html);
+        else fullCont.insertAdjacentHTML('beforeend', html);
+      }
+    });
+
+    document.getElementById('remainingCount').innerText = remaining;
+    const percent = petTasks.length > 0 ? Math.round((doneCount / petTasks.length) * 100) : 0;
+    document.getElementById('progText').innerText = percent + "%";
+    const heartEl = document.getElementById('heartVisual');
+    if(percent === 100) heartEl.classList.add('filled'); else heartEl.classList.remove('filled');
+  }
+
   function askUrgency() {
     const title = document.getElementById('tTitle').value;
     if(!title) return alert("ใส่ชื่อด้วยมึง!");
     tempTask = {
       title,
-      time: (document.getElementById('timeH').value || "00") + ":" + (document.getElementById('timeM').value || "00"),
+      time: (document.getElementById('tH').value || "00") + ":" + (document.getElementById('tM').value || "00"),
       type: document.getElementById('tType').value,
       done: false
     };
@@ -165,65 +222,23 @@
 
   function finalizeTask(isUrgent) {
     tempTask.showHome = isUrgent;
-    tasks.push(tempTask);
+    petTasks.push(tempTask);
     document.getElementById('catPopup').style.display = 'none';
-    render();
+    renderHome();
     switchPage('check-page', document.getElementById('nav-check'));
-    document.getElementById('tTitle').value = ""; 
-    document.getElementById('timeH').value = ""; document.getElementById('timeM').value = "";
   }
 
-  function render() {
-    const gridCont = document.getElementById('taskGrid');
-    const fullCont = document.getElementById('fullTaskContainer');
-    const checkCont = document.getElementById('checkListContainer');
-    gridCont.innerHTML = ""; fullCont.innerHTML = ""; checkCont.innerHTML = "";
-
-    let remaining = 0; let doneCount = 0; let showCount = 0;
-
-    tasks.forEach((t, i) => {
-      if(!t.done) remaining++; else doneCount++;
-      
-      // Check List Page
-      checkCont.innerHTML += `
-        <div class="task-row">
-          <div><b>${t.time}</b> ${t.title}</div>
-          <button class="btn-star ${t.showHome?'active':''}" onclick="toggleHome(${i})">⭐️</button>
-        </div>`;
-
-      // Home Page
-      if(t.showHome) {
-        showCount++;
-        const html = `
-          <div class="${t.type==='grid'?'task-box':'task-row'}">
-            <div style="${t.type==='full'?'text-align:left':''}">
-              <div style="font-size:0.9rem;">${t.title}</div>
-              <div style="font-size:0.7rem; opacity:0.5;">${t.time}</div>
-            </div>
-            <button class="btn-check" style="${t.type==='full'?'width:80px; margin:0':''}" onclick="toggleDone(${i})">${t.done?'DONE':'CHECK'}</button>
-          </div>`;
-        if(t.type==='grid') gridCont.innerHTML += html; else fullCont.innerHTML += html;
-      }
-    });
-
-    document.getElementById('homeEmpty').style.display = showCount > 0 ? 'none' : 'block';
-    document.getElementById('remainingCount').innerText = remaining;
-    const p = tasks.length > 0 ? Math.round((doneCount/tasks.length)*100) : 0;
-    document.getElementById('progText').innerText = p + "%";
-    const heart = document.getElementById('heartVisual');
-    if(p === 100) { heart.innerText = "❤️"; heart.classList.add('filled'); } else { heart.innerText = "🧡"; heart.classList.remove('filled'); }
-  }
-
-  function toggleHome(i) { tasks[i].showHome = !tasks[i].showHome; render(); }
-  function toggleDone(i) { tasks[i].done = !tasks[i].done; render(); }
+  function toggleTask(i) { petTasks[i].done = !petTasks[i].done; renderHome(); }
+  function toggleStar(i) { petTasks[i].showHome = !petTasks[i].showHome; renderHome(); }
   function switchPage(id, el) {
     document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
+    if(el) el.classList.add('active');
   }
   function setTheme(t) { document.documentElement.setAttribute('data-theme', t); }
-  render();
+
+  renderHome();
 </script>
 </body>
 </html>
