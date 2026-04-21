@@ -7,249 +7,231 @@
   <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   
   <style>
-    /* --- THEME ENGINE --- */
     :root { --bg: #FEF7C5; --hero: #FFFCE6; --accent: #F3D617; --text: #5D5632; --card: rgba(255, 255, 255, 0.6); }
     [data-theme="berry"] { --bg: #FFB4DA; --hero: #FFF0F7; --accent: #FF8FAB; --text: #633B4D; }
     [data-theme="sprout"] { --bg: #D5FFC9; --hero: #F2FFE0; --accent: #86D071; --text: #3D5238; }
     [data-theme="ocean"] { --bg: #BCD3F9; --hero: #F0F5FF; --accent: #8EB1E6; --text: #3A4B6B; }
 
-    body { font-family: 'Itim', cursive; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; transition: 0.5s; overflow-x: hidden; }
+    body { font-family: 'Itim', cursive; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px 20px 120px; transition: 0.5s; }
     .container { width: 100%; max-width: 380px; margin: auto; }
 
-    /* Page Setup */
     .app-page { display: none; width: 100%; animation: fadeIn 0.3s ease; }
     .app-page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     /* UI Elements */
     .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 30px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.3); }
-    .profile-card { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
-    
     .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-bottom: 15px; }
     .stat-box { background: white; border-radius: 25px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-
-    .alert-banner { background: #FFEB3B; color: #856404; padding: 15px; border-radius: 20px; font-size: 0.9rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
     
-    .toggle-switch { width: 45px; height: 24px; background: #ddd; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; }
-    .toggle-switch.on { background: #4CAF50; }
-    .toggle-switch::before { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
-    .toggle-switch.on::before { left: 24px; }
-
-    /* ช่องใส่รูปแมว (แทนที่อันที่ซ้อน) */
-    .cat-display-area { width: 100%; height: 180px; background: white; border-radius: 35px; margin-top: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); cursor: pointer; }
-    .cat-display-area img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* Task & Calendar */
-    .task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .task-box { background: white; padding: 15px; border-radius: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-    .btn-check { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 12px; width: 100%; margin-top: 10px; font-family: 'Itim'; cursor: pointer; }
-
+    /* Calendar Grid */
     .cal-container { background: white; border-radius: 35px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    .cal-header { display: flex; justify-content: space-between; align-items: center; font-weight: bold; margin-bottom: 20px; }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; font-size: 0.9rem; }
-    .day-label { opacity: 0.3; font-size: 0.7rem; padding-bottom: 10px; }
-    .cal-day { height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; }
-    .cal-day.today { background: var(--accent); color: white; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .cal-day { height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; position: relative; user-select: none; }
+    .cal-day.today { background: var(--accent); color: white; font-weight: bold; }
+    .has-event::after { content: ''; position: absolute; bottom: 5px; width: 4px; height: 4px; background: red; border-radius: 50%; }
 
-    /* Bottom Nav */
-    .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 75px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; left: 50%; transform: translateX(-50%); box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000; }
-    .nav-item { cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1.5rem; }
-    .nav-item.active { opacity: 1; color: var(--accent); transform: scale(1.1); }
+    /* Modal / Pop-up */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+    .modal-content { background: white; width: 100%; max-width: 320px; border-radius: 35px; padding: 25px; position: relative; }
+    .event-item { border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 15px; text-align: left; }
 
-    #catPopup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
-    .popup-box { background: white; padding: 25px; border-radius: 35px; width: 80%; max-width: 300px; text-align: center; }
+    /* Inputs */
+    input, select { width: 100%; padding: 12px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 10px; font-family: 'Itim'; box-sizing: border-box; }
+    
+    .cat-display-area { width: 100%; height: 150px; background: white; border-radius: 35px; margin-top: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+    .bottom-nav { position: fixed; bottom: 20px; background: rgba(255,255,255,0.85); backdrop-filter: blur(15px); width: 90%; max-width: 380px; height: 75px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; left: 50%; transform: translateX(-50%); z-index: 1000; }
+    .nav-item { cursor: pointer; opacity: 0.3; font-size: 1.5rem; }
+    .nav-item.active { opacity: 1; color: var(--accent); }
   </style>
 </head>
-
 <body>
 
-<div id="catPopup">
-  <div class="popup-box">
-    <h3>งานนี้ด่วนมั้ยเจ้าทาส? 🐾</h3>
-    <button onclick="finalizeTask(true)" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:15px; margin-bottom:10px; font-family:'Itim'; color:white; font-weight:bold;">ด่วน (โชว์หน้าโฮม)</button>
-    <button onclick="finalizeTask(false)" style="width:100%; padding:15px; background:#f5f5f5; border:none; border-radius:15px; font-family:'Itim';">ไม่ด่วน</button>
+<div id="eventModal" class="modal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h3 id="modalDateTitle">กิจกรรมวันนี้</h3>
+    <div id="modalEventList"></div>
+    <button onclick="document.getElementById('eventModal').style.display='none'" style="width:100%; padding:12px; background:#f0f0f0; border:none; border-radius:15px; font-family:'Itim';">ปิด</button>
   </div>
 </div>
 
 <div class="container">
-
   <div id="home" class="app-page active">
-    <div class="glass-card profile-card">
-      <div>
-        <h1 style="margin:0; font-size:1.8rem;">ไงเจ้าทาส ! 🐾</h1>
-        <p style="margin:0; opacity:0.6; font-size:0.8rem;">— C H E C K Q</p>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <div onclick="setTheme('')" style="width:22px; height:22px; background:#FEF7C5; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
-        <div onclick="setTheme('berry')" style="width:22px; height:22px; background:#FFB4DA; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
-        <div onclick="setTheme('sprout')" style="width:22px; height:22px; background:#D5FFC9; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
-        <div onclick="setTheme('ocean')" style="width:22px; height:22px; background:#BCD3F9; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
-      </div>
+    <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
+      <h1 style="margin:0;">ไงเจ้าทาส ! 🐾</h1>
+      <button onclick="requestNotify()" style="font-size:0.7rem; background:white; border:none; border-radius:10px; padding:5px;">🔔 เปิดแจ้งเตือน</button>
     </div>
 
     <div class="stat-grid">
-      <div class="stat-box">
-        <div id="todayDate" style="font-size:1.5rem; font-weight:bold;">21</div>
-        <div id="todayMonth" style="font-size:0.6rem; opacity:0.5;">APR 2026</div>
-      </div>
-      <div class="stat-box" onclick="switchPage('check-page', document.getElementById('nav-check'))" style="cursor:pointer;">
-        <div style="border: 2px solid var(--accent); width:35px; height:35px; border-radius:50%; margin:0 auto 5px; display:flex; align-items:center; justify-content:center; font-weight:bold;" id="remainingCount">0</div>
-        <div style="font-size:0.6rem; opacity:0.5;">ตารางที่เหลือ</div>
-      </div>
-      <div class="stat-box">
-        <div style="font-size:1.5rem;">🧡</div>
-        <div id="progText" style="font-size:0.7rem; font-weight:bold;">0%</div>
-      </div>
+      <div class="stat-box"><div id="homeDay" style="font-size:1.5rem; font-weight:bold;">-</div><div id="homeMonth" style="font-size:0.6rem;">-</div></div>
+      <div class="stat-box"><div id="taskRemain" style="font-size:1.2rem; font-weight:bold;">0</div><div style="font-size:0.6rem;">งานที่เหลือ</div></div>
+      <div class="stat-box"><div style="font-size:1.2rem;">🧡</div><div id="homeProg" style="font-size:0.6rem;">0%</div></div>
     </div>
 
-    <div class="alert-banner" id="alertBox">
-      <span>🟡 วันนี้ยังไม่ได้ล้างกระบะ</span>
-      <span onclick="this.parentElement.remove()" style="cursor:pointer; opacity:0.5;">X ปิด</span>
+    <div id="urgentAlert" class="alert-banner" style="background:#FFEB3B; padding:15px; border-radius:20px; margin-bottom:15px; display:none;">
+      <span>🟡 ถึงเวลาทำกิจกรรมแล้ว!</span>
     </div>
 
-    <div style="font-size:0.9rem; margin-bottom:8px; opacity: 0.8;">管理 แจ้งเตือนด่วน ∨</div>
-    
-    <div class="glass-card" style="padding:15px; background:rgba(255,255,255,0.2); margin-bottom:10px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span>⏰ อาหารเช้า 11:00</span>
-        <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span>⏰ ล้างกระบะ 20:00</span>
-        <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
-      </div>
-    </div>
+    <p style="font-weight:bold;">ตารางด่วน ⭐️</p>
+    <div id="homeTaskGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
 
-    <p style="font-weight:bold; margin-top:20px;">ตารางด่วนวันนี้ ⭐️</p>
-    <div id="taskGrid" class="task-grid"></div>
-    <div id="fullTaskContainer" style="margin-top:12px;"></div>
-
-    <div class="cat-display-area" onclick="triggerUpload()">
-      <div id="uploadPlaceholder" style="text-align:center; opacity:0.4;">
-        <span style="font-size:2.5rem;">📸</span><br>คลิกเพื่อใส่รูปแมว
-      </div>
-      <img id="catImg" style="display:none;">
-      <input type="file" id="fileInput" hidden accept="image/*" onchange="previewImg(this)">
+    <div class="cat-display-area" onclick="document.getElementById('catInp').click()">
+      <img id="catPrev" style="width:100%; height:100%; object-fit:cover; display:none;">
+      <div id="catPlc" style="opacity:0.3;">📸 คลิกใส่รูปแมว</div>
+      <input type="file" id="catInp" hidden onchange="loadImg(this)">
     </div>
   </div>
 
-  <div id="check-page" class="app-page">
-    <h2 style="text-align:center;">📋 รายการทั้งหมด</h2>
-    <div id="checkListContainer"></div>
-  </div>
-
-  <div id="calendar" class="app-page">
-    <h2 style="text-align:center;">📅 ปฏิทินกิจกรรม</h2>
+  <div id="calendar-page" class="app-page">
     <div class="cal-container">
-      <div class="cal-header"><span style="opacity:0.2;">◀</span><span id="calMonthYear">April 2026</span><span style="opacity:0.2;">▶</span></div>
+      <h3 id="calMonthYear">-</h3>
       <div class="cal-grid" id="calGrid"></div>
+      <p style="font-size:0.7rem; opacity:0.5; margin-top:10px;">* กดค้างที่วันที่เพื่อดูรายละเอียดกิจกรรม</p>
     </div>
-    <div class="glass-card" style="margin-top:20px; text-align:center;">
-       <input type="text" id="tTitle" style="width:100%; padding:15px; border-radius:20px; border:1px solid #eee; margin-bottom:10px; font-family:'Itim';" placeholder="ชื่อกิจกรรม...">
-       <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;">
-         <input type="text" id="tH" style="width:60px; text-align:center; padding:10px; border-radius:12px; border:1px solid #eee;" placeholder="00">
-         <b>:</b>
-         <input type="text" id="tM" style="width:60px; text-align:center; padding:10px; border-radius:12px; border:1px solid #eee;" placeholder="00">
-       </div>
-       <button onclick="askUrgency()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:20px; font-family:'Itim'; color:white; font-weight:bold;">บันทึกตาราง</button>
+
+    <div class="glass-card" style="margin-top:15px;">
+      <h4>➕ เพิ่มกิจกรรม</h4>
+      <input type="text" id="evTitle" placeholder="ทำอะไร?">
+      <div style="display:flex; gap:5px;">
+        <input type="time" id="evTime" style="flex:1;">
+        <input type="text" id="evLoc" placeholder="ที่ไหน?" style="flex:1;">
+      </div>
+      <button onclick="addEvent()" style="width:100%; padding:15px; background:var(--accent); border:none; border-radius:20px; color:white; font-weight:bold; font-family:'Itim';">บันทึก</button>
     </div>
   </div>
-
 </div>
 
 <nav class="bottom-nav">
   <div class="nav-item active" onclick="switchPage('home', this)">🏠</div>
-  <div id="nav-check" class="nav-item" onclick="switchPage('check-page', this)">📋</div>
-  <div class="nav-item" onclick="switchPage('calendar', this)">📅</div>
+  <div class="nav-item" onclick="switchPage('calendar-page', this)">📅</div>
 </nav>
 
 <script>
-  let tasks = [
-    { title: "อาหารเช้า", time: "11:00", type: "grid", done: false, showHome: true },
-    { title: "ล้างกระบะ", time: "20:00", type: "full", done: false, showHome: true }
-  ];
-  let tempTask = null;
+  let events = JSON.parse(localStorage.getItem('catEvents')) || [];
+  let longPressTimer;
 
-  // Image Upload Logic
-  function triggerUpload() { document.getElementById('fileInput').click(); }
-  function previewImg(input) {
-    if (input.files && input.files[0]) {
-      let reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('catImg').src = e.target.result;
-        document.getElementById('catImg').style.display = 'block';
-        document.getElementById('uploadPlaceholder').style.display = 'none';
-      }
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  function renderCalendar() {
-    const now = new Date();
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    document.getElementById('calMonthYear').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
-    document.getElementById('todayDate').innerText = now.getDate();
-    document.getElementById('todayMonth').innerText = `${monthNames[now.getMonth()].substring(0,3).toUpperCase()} ${now.getFullYear()}`;
-
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-    const grid = document.getElementById('calGrid');
-    grid.innerHTML = `<div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div><div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div><div class="day-label">S</div>`;
-
-    for (let i = 0; i < firstDay; i++) { grid.innerHTML += `<div></div>`; }
-    for (let d = 1; d <= daysInMonth; d++) {
-      grid.innerHTML += `<div class="cal-day ${d === now.getDate() ? 'today' : ''}">${d}</div>`;
-    }
-  }
-
-  function renderTasks() {
-    const grid = document.getElementById('taskGrid');
-    const full = document.getElementById('fullTaskContainer');
-    const check = document.getElementById('checkListContainer');
-    grid.innerHTML = ""; full.innerHTML = ""; check.innerHTML = "";
-    let remaining = 0; let doneCount = 0;
-
-    tasks.forEach((t, i) => {
-      if(!t.done) remaining++; else doneCount++;
-      check.innerHTML += `<div style="background:white; padding:15px; border-radius:20px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;"><div><b>${t.time}</b> ${t.title}</div><button style="background:none; border:none; opacity:${t.showHome?1:0.2}" onclick="toggleHome(${i})">⭐️</button></div>`;
-      if(t.showHome) {
-        const html = `<div class="${t.type==='grid'?'task-box':''}" style="${t.type==='full'?'background:white; padding:15px 25px; border-radius:25px; display:flex; justify-content:space-between; margin-bottom:10px;':''}"><div><div>${t.title}</div><div style="font-size:0.7rem; opacity:0.5;">${t.time}</div></div><button class="btn-check" style="${t.type==='full'?'width:80px; margin:0':''}" onclick="toggleDone(${i})">${t.done?'DONE':'CHECK'}</button></div>`;
-        if(t.type === 'grid') grid.innerHTML += html; else full.innerHTML += html;
-      }
-    });
-    document.getElementById('remainingCount').innerText = remaining;
-    document.getElementById('progText').innerText = (tasks.length > 0 ? Math.round((doneCount/tasks.length)*100) : 0) + "%";
-  }
-
-  function askUrgency() {
-    const title = document.getElementById('tTitle').value;
-    if(!title) return;
-    tempTask = { title, time: `${document.getElementById('tH').value||'00'}:${document.getElementById('tM').value||'00'}`, type: "grid", done: false };
-    document.getElementById('catPopup').style.display = 'flex';
-  }
-
-  function finalizeTask(isUrgent) {
-    tempTask.showHome = isUrgent;
-    tasks.push(tempTask);
-    document.getElementById('catPopup').style.display = 'none';
-    renderTasks();
-    switchPage('home', document.querySelectorAll('.nav-item')[0]);
-    document.getElementById('tTitle').value = "";
-  }
-
-  function toggleDone(i) { tasks[i].done = !tasks[i].done; renderTasks(); }
-  function toggleHome(i) { tasks[i].showHome = !tasks[i].showHome; renderTasks(); }
   function switchPage(id, el) {
     document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
-    if(id === 'calendar') renderCalendar();
+    if(id === 'calendar-page') renderCalendar();
+    updateHome();
   }
-  function setTheme(t) { document.documentElement.setAttribute('data-theme', t); }
 
-  renderCalendar();
-  renderTasks();
+  function renderCalendar() {
+    const now = new Date();
+    const grid = document.getElementById('calGrid');
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+    
+    document.getElementById('calMonthYear').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+    grid.innerHTML = ['S','M','T','W','T','F','S'].map(d => `<div style="opacity:0.3;font-size:0.7rem;">${d}</div>`).join('');
+
+    for(let i=0; i<firstDay; i++) grid.innerHTML += '<div></div>';
+    for(let d=1; d<=daysInMonth; d++) {
+      const dateStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
+      const hasEv = events.some(e => e.date === dateStr);
+      const isToday = d === now.getDate() ? 'today' : '';
+      grid.innerHTML += `<div class="cal-day ${isToday} ${hasEv?'has-event':''}" 
+        onmousedown="startPress('${dateStr}', ${d})" onmouseup="endPress()" 
+        ontouchstart="startPress('${dateStr}', ${d})" ontouchend="endPress()">${d}</div>`;
+    }
+  }
+
+  function startPress(date, day) {
+    longPressTimer = setTimeout(() => showDayDetail(date, day), 600);
+  }
+  function endPress() { clearTimeout(longPressTimer); }
+
+  function showDayDetail(date, day) {
+    const dayEvents = events.filter(e => e.date === date);
+    const list = document.getElementById('modalEventList');
+    document.getElementById('modalDateTitle').innerText = `กิจกรรมวันที่ ${day}`;
+    list.innerHTML = dayEvents.length ? '' : '<p>ไม่มีกิจกรรม</p>';
+    
+    dayEvents.forEach(e => {
+      list.innerHTML += `
+        <div class="event-item">
+          <div style="font-weight:bold; color:var(--accent);">🕒 ${e.time} น.</div>
+          <div><b>กิจกรรม:</b> ${e.title}</div>
+          <div><b>สถานที่:</b> ${e.loc || '-'}</div>
+        </div>`;
+    });
+    document.getElementById('eventModal').style.display = 'flex';
+  }
+
+  function addEvent() {
+    const title = document.getElementById('evTitle').value;
+    const time = document.getElementById('evTime').value;
+    const loc = document.getElementById('evLoc').value;
+    if(!title || !time) return alert("ใส่ข้อมูลให้ครบก่อนทาส!");
+
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')}`;
+    
+    events.push({ title, time, loc, date: dateStr, done: false });
+    localStorage.setItem('catEvents', JSON.stringify(events));
+    alert("บันทึกแล้ว! จะเตือนเมื่อถึงเวลานะ");
+    renderCalendar();
+    updateHome();
+  }
+
+  function updateHome() {
+    const now = new Date();
+    document.getElementById('homeDay').innerText = now.getDate();
+    document.getElementById('homeMonth').innerText = now.toLocaleString('default', { month: 'short' }).toUpperCase();
+    
+    const todayStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')}`;
+    const todayTasks = events.filter(e => e.date === todayStr);
+    
+    const grid = document.getElementById('homeTaskGrid');
+    grid.innerHTML = "";
+    todayTasks.forEach((t, i) => {
+      grid.innerHTML += `
+        <div style="background:white; padding:10px; border-radius:20px; text-align:center;">
+          <div style="font-size:0.8rem;">${t.title}</div>
+          <div style="font-size:0.6rem; opacity:0.5;">${t.time}</div>
+        </div>`;
+    });
+    document.getElementById('taskRemain').innerText = todayTasks.filter(t => !t.done).length;
+  }
+
+  // ระบบแจ้งเตือนจริง
+  function requestNotify() {
+    Notification.requestPermission();
+  }
+
+  setInterval(() => {
+    const now = new Date();
+    const curTime = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    const todayStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')}`;
+    
+    events.forEach(e => {
+      if(e.date === todayStr && e.time === curTime && !e.notified) {
+        if(Notification.permission === "granted") {
+          new Notification(`🐾 ถึงเวลาแล้วเจ้าทาส!`, { body: `ต้องทำ: ${e.title} ที่ ${e.loc}` });
+        }
+        document.getElementById('urgentAlert').style.display = 'block';
+        e.notified = true;
+      }
+    });
+  }, 10000);
+
+  function loadImg(inp) {
+    if (inp.files && inp.files[0]) {
+      let reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('catPrev').src = e.target.result;
+        document.getElementById('catPrev').style.display = 'block';
+        document.getElementById('catPlc').style.display = 'none';
+      };
+      reader.readAsDataURL(inp.files[0]);
+    }
+  }
+
+  updateHome();
 </script>
 </body>
 </html>
